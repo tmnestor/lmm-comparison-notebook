@@ -286,6 +286,8 @@ def plot_overall_f1(
     ax.set_xlabel("")
     ax.set_ylabel("Mean F1")
     ax.set_ylim(0, 1.15)
+    ax.tick_params(axis="x", rotation=45)
+    plt.setp(ax.get_xticklabels(), ha="right")
 
 
 def plot_field_heatmap(field_df: pd.DataFrame, ax: plt.Axes) -> None:
@@ -308,6 +310,8 @@ def plot_field_heatmap(field_df: pd.DataFrame, ax: plt.Axes) -> None:
     )
     ax.set_title("Per-Field F1 Scores", fontweight="bold", fontsize=12)
     ax.set_ylabel("")
+    ax.tick_params(axis="x", rotation=45)
+    plt.setp(ax.get_xticklabels(), ha="right")
 
 
 def plot_throughput(
@@ -348,3 +352,5 @@ def plot_throughput(
     ax.set_title("Throughput (docs/min)", fontweight="bold", fontsize=12)
     ax.set_xlabel("")
     ax.set_ylabel("Documents / Minute")
+    ax.tick_params(axis="x", rotation=45)
+    plt.setp(ax.get_xticklabels(), ha="right")
