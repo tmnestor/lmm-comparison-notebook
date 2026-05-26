@@ -5,9 +5,10 @@ Jupyter notebook for comparing field extraction accuracy (F1) and throughput acr
 ## Structure
 
 ```
-comparison_config.yaml   # Models, fields, and display settings
-comparison_utils.py      # YAML loaders, scoring logic, seaborn visualizations
-model_comparison.ipynb   # Interactive comparison notebook
+comparison_config.yaml        # Models, fields, and display settings
+comparison_utils.py           # YAML loaders, scoring logic, seaborn visualizations
+model_comparison.ipynb        # Interactive comparison notebook
+convert_sroie_results.ipynb   # Convert SROIE benchmark CSV/JSON → YAML
 ```
 
 ## Setup
@@ -63,17 +64,19 @@ results:
 ### Converting SROIE benchmark outputs
 
 The [SROIE benchmark notebook](https://github.com/tmnestor/SROIE) outputs per-image
-CSV and summary JSON. To use those results here, convert them to the YAML formats
-above:
+CSV and summary JSON — not YAML. Use `convert_sroie_results.ipynb` to convert:
 
-1. **Ground truth** — the SROIE dataset stores ground truth as one JSON file per image
-   in `data/sroie/test/entities/`. Merge these into a single `sroie_ground_truth.yaml`
-   mapping each image stem to its four fields.
+1. Copy the benchmark outputs to this machine:
+   - `sroie_internvl3_per_image.csv` (columns: `image_id, {field}_gt, {field}_pred, {field}_match`)
+   - `sroie_internvl3_summary.json` (model name, elapsed time, per-field metrics)
 
-2. **Model results** — the benchmark notebook writes
-   `data/sroie/output/sroie_internvl3_per_image.csv` with columns
-   `image_id, company_gt, company_pred, ..., total_match`. Reshape this into the YAML
-   results format, adding `processing_time` from the summary JSON.
+2. Open `convert_sroie_results.ipynb`, set the input paths and model key, and run all
+   cells. It writes both `evaluation_data/sroie_ground_truth.yaml` and
+   `results/sroie_{model_key}_results.yaml`.
+
+3. Repeat for each model (change `MODEL_KEY` and input paths).
+
+4. Run `model_comparison.ipynb` to generate the comparison dashboard.
 
 ## Scoring
 
