@@ -20,37 +20,60 @@ pip install pyyaml pandas numpy matplotlib seaborn
 
 ## Data Layout
 
-The notebook expects data in the following structure (not included in the repo):
+The notebook expects data in the following structure:
 
 ```
 evaluation_data/
-  ground_truth.yaml        # Ground truth field values per image
+  sroie_ground_truth.yaml        # Ground truth field values per image
 
 results/
-  internvl3_5_8b_results.yaml
-  sonnet_3_5_results.yaml
-  ocr_extraction_results.yaml
+  sroie_internvl3_5_8b_results.yaml
+  sroie_sonnet_3_5_results.yaml
 ```
 
 ### Ground truth format
 
+Each image key is the receipt filename stem. The four SROIE fields are `company`,
+`date`, `address`, and `total`.
+
 ```yaml
 images:
-  invoice_001:
-    DOCUMENT_TYPE: INVOICE
-    BUSINESS_ABN: "12345678901"
+  X00016469612:
+    company: "SYARIKAT PERNIAGAAN GIN KEE"
+    date: "25/12/2018"
+    address: "NO.1, GROUND FLOOR, JALAN LAGENDA 2"
+    total: "4.95"
 ```
 
 ### Results format
 
+Each entry has the image key, a `processing_time` in seconds, and extracted `fields`.
+
 ```yaml
 results:
-  - image: invoice_001
-    processing_time: 2.34
+  - image: X00016469612
+    processing_time: 1.05
     fields:
-      DOCUMENT_TYPE: INVOICE
-      BUSINESS_ABN: "12345678901"
+      company: "SYARIKAT PERNIAGAAN GIN KEE"
+      date: "25/12/2018"
+      address: "NO.1, GROUND FLOOR, JALAN LAGENDA 2"
+      total: "4.95"
 ```
+
+### Converting SROIE benchmark outputs
+
+The [SROIE benchmark notebook](https://github.com/tmnestor/SROIE) outputs per-image
+CSV and summary JSON. To use those results here, convert them to the YAML formats
+above:
+
+1. **Ground truth** — the SROIE dataset stores ground truth as one JSON file per image
+   in `data/sroie/test/entities/`. Merge these into a single `sroie_ground_truth.yaml`
+   mapping each image stem to its four fields.
+
+2. **Model results** — the benchmark notebook writes
+   `data/sroie/output/sroie_internvl3_per_image.csv` with columns
+   `image_id, company_gt, company_pred, ..., total_match`. Reshape this into the YAML
+   results format, adding `processing_time` from the summary JSON.
 
 ## Configuration
 

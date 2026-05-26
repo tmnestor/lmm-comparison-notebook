@@ -3,6 +3,7 @@
 Provides YAML loaders, field comparison logic, and seaborn visualizations.
 """
 
+import re
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -19,8 +20,88 @@ def _normalize(value: str | None) -> str | None:
     return stripped if stripped else None
 
 
+# --- SROIE-specific normalization (matches ICDAR 2019 SROIE evaluation) ---
+
+_WHITESPACE_RE = re.compile(r"\s+")
+_CURRENCY_RE = re.compile(r"[$\u00a3\u20ac\u00a5]|RM")
+_COMMA_IN_NUMBER_RE = re.compile(r"(\d),(\d)")
+
+_MONTHS = {
+    "jan": "01",
+    "feb": "02",
+    "mar": "03",
+    "apr": "04",
+    "may": "05",
+    "jun": "06",
+    "jul": "07",
+    "aug": "08",
+    "sep": "09",
+    "oct": "10",
+    "nov": "11",
+    "dec": "12",
+}
+
+
+def _normalize_text(text: str) -> str:
+    """Normalize text: lowercase, collapse whitespace, strip."""
+    return _WHITESPACE_RE.sub(" ", text.lower().strip())
+
+
+def _normalize_total(text: str) -> str:
+    """Normalize monetary total: strip currency, commas; format as 2-decimal float."""
+    text = text.strip()
+    text = _CURRENCY_RE.sub("", text)
+    text = _COMMA_IN_NUMBER_RE.sub(r"\1\2", text)
+    text = text.strip()
+    try:
+        return f"{float(text):.2f}"
+    except ValueError:
+        return _normalize_text(text)
+
+
+def _normalize_date(text: str) -> str:
+    """Normalize date to DD/MM/YYYY format."""
+    text = text.strip()
+
+    # ISO: YYYY-MM-DD or YYYY/MM/DD
+    m = re.match(r"(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})", text)
+    if m:
+        return f"{int(m.group(3)):02d}/{int(m.group(2)):02d}/{m.group(1)}"
+
+    # DD/MM/YYYY or DD-MM-YYYY or DD.MM.YYYY
+    m = re.match(r"(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})", text)
+    if m:
+        return f"{int(m.group(1)):02d}/{int(m.group(2)):02d}/{m.group(3)}"
+
+    # DD Mon YYYY (e.g. "25 December 2018")
+    m = re.match(r"(\d{1,2})\s+(\w{3,})\s+(\d{4})", text, re.IGNORECASE)
+    if m:
+        month_str = m.group(2)[:3].lower()
+        if month_str in _MONTHS:
+            return f"{int(m.group(1)):02d}/{_MONTHS[month_str]}/{m.group(3)}"
+
+    return _normalize_text(text)
+
+
+def _normalize_for_field(field_name: str, value: str) -> str:
+    """Apply field-specific normalization.
+
+    Date and total fields get format-aware parsing. All other fields get
+    whitespace-collapsed case-insensitive comparison (SROIE standard).
+    """
+    if field_name == "total":
+        return _normalize_total(value)
+    if field_name == "date":
+        return _normalize_date(value)
+    return _normalize_text(value)
+
+
 def compare_field(
-    extracted: str | None, expected: str | None, *, is_list: bool
+    extracted: str | None,
+    expected: str | None,
+    *,
+    is_list: bool,
+    field_name: str = "",
 ) -> float:
     """Compare an extracted field value against ground truth.
 
@@ -28,6 +109,7 @@ def compare_field(
         extracted: The model's extracted value (or None if missing).
         expected: The ground truth value (or None if not applicable).
         is_list: If True, split on '|' and use position-aware F1.
+        field_name: Field name used for SROIE-specific normalization.
 
     Returns:
         Score from 0.0 to 1.0.
@@ -41,7 +123,9 @@ def compare_field(
         return 0.0
 
     if not is_list:
-        return 1.0 if extracted.lower() == expected.lower() else 0.0
+        norm_ext = _normalize_for_field(field_name, extracted)
+        norm_exp = _normalize_for_field(field_name, expected)
+        return 1.0 if norm_ext == norm_exp else 0.0
 
     ext_items = [item.strip().lower() for item in extracted.split("|")]
     exp_items = [item.strip().lower() for item in expected.split("|")]
@@ -231,7 +315,9 @@ def evaluate_model(
             if ext_val is None and gt_val is None:
                 continue
 
-            score = compare_field(ext_val, gt_val, is_list=is_list)
+            score = compare_field(
+                ext_val, gt_val, is_list=is_list, field_name=field_name
+            )
             rows.append({"image": image, "field": field_name, "score": score})
 
     return pd.DataFrame(rows, columns=["image", "field", "score"])

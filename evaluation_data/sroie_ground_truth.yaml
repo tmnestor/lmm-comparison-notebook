@@ -1,0 +1,61 @@
+# SROIE test set ground truth (fictitious sample — 10 receipts)
+images:
+  X00016469612:
+    company: "SYARIKAT PERNIAGAAN GIN KEE"
+    date: "25/12/2018"
+    address: "NO.1, GROUND FLOOR, JALAN LAGENDA 2, TAMAN LAGENDA HEIGHTS, 71010 PORT DICKSON"
+    total: "4.95"
+
+  X00016469670:
+    company: "GARDENIA BAKERIES (KL) SDN BHD"
+    date: "31/10/2018"
+    address: "LOT 3, JALAN PELABUR 23/1, SECTION 23, 40300 SHAH ALAM, SELANGOR"
+    total: "7.60"
+
+  X00016469688:
+    company: "99 SPEED MART S/B"
+    date: "17/01/2018"
+    address: "LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN"
+    total: "14.30"
+
+  X00016469702:
+    company: "UNIHAKKA INTERNATIONAL SDN BHD"
+    date: "09/03/2018"
+    address: "12, JALAN TAMPOI 7/4, KAWASAN PERINDUSTRIAN TAMPOI, 81200 JOHOR BAHRU"
+    total: "23.00"
+
+  X00016469715:
+    company: "KEDAI PAPAN MANN YEW"
+    date: "22/06/2018"
+    address: "NO. 62, JALAN TELOK SISEK, 25000 KUANTAN, PAHANG"
+    total: "38.50"
+
+  X00016469741:
+    company: "MR D.I.Y. (M) SDN BHD"
+    date: "15/08/2018"
+    address: "LOT 1, JALAN TEKNOLOGI 3/4, TAMAN SAINS SELANGOR, 47810 PETALING JAYA"
+    total: "52.80"
+
+  X00016469755:
+    company: "POPULAR BOOK CO (M) SDN BHD"
+    date: "03/11/2018"
+    address: "NO. 8, JALAN 7A/62A, BANDAR MENJALARA, 52200 KUALA LUMPUR"
+    total: "89.90"
+
+  X00016469763:
+    company: "TESCO STORES (MALAYSIA) SDN BHD"
+    date: "28/04/2018"
+    address: "LOT 2, JALAN TESCO, MUTIARA RINI, 81300 SKUDAI, JOHOR"
+    total: "156.45"
+
+  X00016469789:
+    company: "WATSON'S PERSONAL CARE STORES SDN BHD"
+    date: "14/07/2018"
+    address: "LOT G-35, GROUND FLOOR, MID VALLEY MEGAMALL, 59200 KUALA LUMPUR"
+    total: "44.70"
+
+  X00016469801:
+    company: "PETRONAS DAGANGAN BERHAD"
+    date: "06/09/2018"
+    address: "KM 25, LEBUHRAYA PERSEKUTUAN, 47301 PETALING JAYA, SELANGOR"
+    total: "120.00"

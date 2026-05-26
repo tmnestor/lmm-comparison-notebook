@@ -1,33 +1,30 @@
 # Configuration for model comparison notebook.
 # All keys are required — missing keys will cause a startup error.
+#
+# Dataset: ICDAR 2019 SROIE (Scanned Receipts OCR and Information Extraction)
+# Task 3: Receipt key information extraction
+# Fields: company, date, address, total (all scalar, exact match after normalization)
 
 ground_truth:
-  path: evaluation_data/ground_truth.yaml
+  path: evaluation_data/sroie_ground_truth.yaml
 
 fields:
   scalar:
-    - DOCUMENT_TYPE
-    - BUSINESS_ABN
-    - SUPPLIER_NAME
-    - TOTAL_AMOUNT
-  list:
-    - LINE_ITEM_DESCRIPTIONS
-    - LINE_ITEM_PRICES
-    - TRANSACTION_DATES
+    - company
+    - date
+    - address
+    - total
+  list: []
 
 models:
   internvl3_5_8b:
     display_name: "InternVL3.5-8B"
-    results_path: results/internvl3_5_8b_results.yaml
+    results_path: results/sroie_internvl3_5_8b_results.yaml
     color: "#e74c3c"
   sonnet_3_5:
     display_name: "Sonnet-3.5"
-    results_path: results/sonnet_3_5_results.yaml
+    results_path: results/sroie_sonnet_3_5_results.yaml
     color: "#3498db"
-  ocr_extraction:
-    display_name: "OCR Extraction"
-    results_path: results/ocr_extraction_results.yaml
-    color: "#2ecc71"
 
 display:
   figure_size: [14, 8]
