@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/tod/Desktop/lmm-comparison-notebook log --oneline -5)",
+      "Bash(conda run -n du pytest:*)",
+      "Bash(conda run:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh api:*)",
+      "Bash(gh repo view:*)",
+      "Bash(python3:*)",
+      "WebSearch",
+      "WebFetch(domain:arxiv.org)",
+      "WebFetch(domain:mmocr.readthedocs.io)",
+      "WebFetch(domain:paperswithcode.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl:*)",
+      "WebFetch(domain:mindee.github.io)",
+      "Bash(python:*)",
+      "Bash(git update-ref:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)",
+      "Bash(git rm:*)",
+      "Bash(tar:*)"
+    ]
+  }
+}
