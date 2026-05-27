@@ -1,0 +1,23 @@
+Extract the following 12 fields from this receipt image.
+Return each field on its own line in exactly this format:
+
+Store_name: <the store or business name>
+Store_addr: <the full store address>
+Tel: <the telephone number>
+Date: <the receipt date in DD/MM/YYYY format>
+Time: <the time in HH:MM (24-hour) format>
+Prod_item: <product names separated by | e.g. Coffee|Tea|Cake>
+Prod_quantity: <quantities separated by | matching product order e.g. 1|2|1>
+Prod_price: <prices separated by | matching product order, no currency symbol e.g. 3.50|4.00|5.25>
+Subtotal: <the subtotal amount as a number, no currency symbol>
+Tax: <the tax amount as a number, no currency symbol>
+Tips: <the tips amount as a number, no currency symbol>
+Total: <the final total amount as a number, no currency symbol>
+
+Rules:
+- For product fields (Prod_item, Prod_quantity, Prod_price), list each item separated by | in order.
+- For "Date", convert to DD/MM/YYYY format regardless of how it appears.
+- For "Time", convert to HH:MM (24-hour) format.
+- For monetary fields (Subtotal, Tax, Tips, Total, Prod_price), use only numbers (no currency symbol).
+- If a field is not visible, write NOT_FOUND.
+- Do NOT add any extra text, explanations, or formatting.
