@@ -88,10 +88,12 @@ def _normalize_for_field(field_name: str, value: str) -> str:
 
     Date and total fields get format-aware parsing. All other fields get
     whitespace-collapsed case-insensitive comparison (SROIE standard).
+    Handles both SROIE (lowercase) and WildReceipt (capitalized) field names.
     """
-    if field_name == "total":
+    name = field_name.lower()
+    if name in ("total", "subtotal", "tax", "tips", "prod_price"):
         return _normalize_total(value)
-    if field_name == "date":
+    if name == "date":
         return _normalize_date(value)
     return _normalize_text(value)
 
